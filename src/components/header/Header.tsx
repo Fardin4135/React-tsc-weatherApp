@@ -7,9 +7,9 @@ import tick from "../../assets/images/icon-checkmark.svg";
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [temperature, setTemperature] = useState<"celsius" | "fahrenheit">("celsius");
-  const [wind, setWind] = useState<"km" | "mph">("km");
-  const [precipitation, setPrecipitation] = useState<"mm" | "inches">("mm");
+  // const [temperature, setTemperature] = useState<"celsius" | "fahrenheit">("celsius");
+  // const [wind, setWind] = useState<"km" | "mph">("km");
+  // const [precipitation, setPrecipitation] = useState<"mm" | "inches">("mm");
 
   const [switchImperial,setSwitchImperial] = useState<boolean>(false);
 
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
         {/* Temperature */}
         <p className="p-2 text-[hsl(240,6%,70%)] text-sm">Temperature</p>
         <div
-          onClick={() => setTemperature("celsius")}
+          // onClick={() => setTemperature("celsius")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
             !switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
@@ -78,7 +78,7 @@ const Header: React.FC = () => {
           {!switchImperial && <img src={tick} alt="tick" />}
         </div>
         <div
-          onClick={() => setTemperature("fahrenheit")}
+          // onClick={() => setTemperature("fahrenheit")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
             switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
@@ -92,7 +92,7 @@ const Header: React.FC = () => {
         {/* Wind Speed */}
         <p className="p-2 text-[hsl(240,6%,70%)] text-sm">Wind Speed</p>
         <div
-          onClick={() => setWind("km")}
+          // onClick={() => setWind("km")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
             !switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
@@ -101,7 +101,7 @@ const Header: React.FC = () => {
           {!switchImperial && <img src={tick} alt="tick" />}
         </div>
         <div
-          onClick={() => setWind("mph")}
+          // onClick={() => setWind("mph")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
             switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
@@ -115,7 +115,7 @@ const Header: React.FC = () => {
         {/* Precipitation */}
         <p className="p-2 text-[hsl(240,6%,70%)] text-sm">Precipitation</p>
         <div
-          onClick={() => setPrecipitation("mm")}
+          // onClick={() => setPrecipitation("mm")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
             !switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
@@ -124,7 +124,7 @@ const Header: React.FC = () => {
           {!switchImperial && <img src={tick} alt="tick" />}
         </div>
         <div
-          onClick={() => setPrecipitation("inches")}
+          // onClick={() => setPrecipitation("inches")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
             switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
