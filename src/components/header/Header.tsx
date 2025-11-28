@@ -11,6 +11,8 @@ const Header: React.FC = () => {
   const [wind, setWind] = useState<"km" | "mph">("km");
   const [precipitation, setPrecipitation] = useState<"mm" | "inches">("mm");
 
+  const [switchImperial,setSwitchImperial] = useState<boolean>(false);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -39,12 +41,12 @@ const Header: React.FC = () => {
         {/* Dropdown button */}
         <div
           ref={buttonRef}
-          className="flex gap-2 sm:gap-3 rounded px-2 py-1 sm:px-4 sm:py-2 items-center bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,30%)] cursor-pointer text-[0.5rem] sm:text-sm md:text-lg"
+          className="flex gap-2 sm:gap-3 rounded px-2 py-1 sm:px-4 sm:py-2 items-center bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,30%)] cursor-pointer text-sm md:text-lg"
           onClick={() => setIsOpen(prev => !prev)}
         >
-          <img src={units} className="w-[10px] sm:w-[15px] md:w-[18px]" alt="units" />
+          <img src={units} className="w-[12px] sm:w-[15px] md:w-[18px]" alt="units" />
           <p className="text-white">Units</p>
-          <img src={dropdown} className="cursor-pointer w-[8px] sm:w-[15px] md:w-[18px]" alt="dropdown" />
+          <img src={dropdown} className="cursor-pointer w-[12px] sm:w-[15px] md:w-[18px]" alt="dropdown" />
         </div>
       </div>
 
@@ -56,29 +58,33 @@ const Header: React.FC = () => {
         }`}
       >
         {/* Switch to Imperial */}
-        <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md ">
+        {!switchImperial ? 
+        <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={()=>setSwitchImperial(true)}>
           Switch to Imperial
         </div>
+        : <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={()=>setSwitchImperial(false)}>
+          Switch to Metric
+        </div> }
 
         {/* Temperature */}
         <p className="p-2 text-[hsl(240,6%,70%)] text-sm">Temperature</p>
         <div
           onClick={() => setTemperature("celsius")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
-            temperature === "celsius" ? "bg-[hsl(243,23%,30%)]" : ""
+            !switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
         >
           <p>Celcius (°C)</p>
-          {temperature === "celsius" && <img src={tick} alt="tick" />}
+          {!switchImperial && <img src={tick} alt="tick" />}
         </div>
         <div
           onClick={() => setTemperature("fahrenheit")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
-            temperature === "fahrenheit" ? "bg-[hsl(243,23%,30%)]" : ""
+            switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
         >
           <p>Fahrenheit (°F)</p>
-          {temperature === "fahrenheit" && <img src={tick} alt="tick" />}
+          {switchImperial && <img src={tick} alt="tick" />}
         </div>
 
         <hr className="mt-3 border-[hsl(243,23%,30%)]" />
@@ -88,20 +94,20 @@ const Header: React.FC = () => {
         <div
           onClick={() => setWind("km")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
-            wind === "km" ? "bg-[hsl(243,23%,30%)]" : ""
+            !switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
         >
           <p>km/h</p>
-          {wind === "km" && <img src={tick} alt="tick" />}
+          {!switchImperial && <img src={tick} alt="tick" />}
         </div>
         <div
           onClick={() => setWind("mph")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
-            wind === "mph" ? "bg-[hsl(243,23%,30%)]" : ""
+            switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
         >
           <p>mph</p>
-          {wind === "mph" && <img src={tick} alt="tick" />}
+          {switchImperial && <img src={tick} alt="tick" />}
         </div>
 
         <hr className="mt-3 border-[hsl(243,23%,30%)]" />
@@ -111,20 +117,20 @@ const Header: React.FC = () => {
         <div
           onClick={() => setPrecipitation("mm")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
-            precipitation === "mm" ? "bg-[hsl(243,23%,30%)]" : ""
+            !switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
         >
           <p>Millimeters (mm)</p>
-          {precipitation === "mm" && <img src={tick} alt="tick" />}
+          {!switchImperial && <img src={tick} alt="tick" />}
         </div>
         <div
           onClick={() => setPrecipitation("inches")}
           className={`cursor-pointer px-2 rounded-md mb-1 py-1 flex justify-between w-full ${
-            precipitation === "inches" ? "bg-[hsl(243,23%,30%)]" : ""
+            switchImperial ? "bg-[hsl(243,23%,30%)]" : ""
           }`}
         >
           <p>Inches (in)</p>
-          {precipitation === "inches" && <img src={tick} alt="tick" />}
+          {switchImperial && <img src={tick} alt="tick" />}
         </div>
       </div>
     </div>

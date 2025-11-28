@@ -50,7 +50,7 @@ export interface WeatherResponse {
   hourly: HourlyData;
   daily: DailyData;
 
-  city?: string; // we inject this from SearchBar
+  city?: string; 
 }
 interface WeatherProps {
   // loading: boolean;
@@ -143,7 +143,7 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
           {/* <img src={sunny} className="w-15 md:w-25" alt="" /> */}
           <img
   src={getWeatherImage(weatherData.current_weather.weathercode)}
-  className="w-10 md:w-20"
+  className="w-18 md:w-25"
   alt="weather icon"
 />
 
