@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import bgImage from "../../assets/images/bg-today-large.svg";
+import bgImage2 from "../../assets/images/bg-today-small.svg"
 import HourlyDropdown from "../Hourlycast/HourlyDropdown";
 import sunny from "../../assets/images/icon-sunny.webp";
 import snow from "../../assets/images/icon-snow.webp";
@@ -11,7 +12,9 @@ import rain from "../../assets/images/icon-rain.webp";
 import thunder from "../../assets/images/icon-storm.webp";
 import overcast from "../../assets/images/icon-overcast.webp";
 
-
+interface WeatherProps {
+  switchImperial: boolean;
+}
 
 export interface CurrentWeather {
   temperature: number;
@@ -57,8 +60,9 @@ interface WeatherProps {
   weatherData: WeatherResponse | null;
 }
 
-const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
+const Weather: React.FC<WeatherProps> = ({ weatherData,switchImperial }) =>  {
 
+  
   const [selectedDay, setSelectedDay] = useState("Today");
   const [data, setData] = useState<WeatherResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -102,6 +106,18 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
         setLoading(false);
       });
   }, []);
+  const fahrenheit = ((feelsLike * 9) / 5 + 32).toFixed(0);
+  const currentTemp2 = ((currentTemp * 9) / 5 + 32).toFixed(0) ;
+  const windMph = (wind * 0.621371).toFixed(0);
+  const precipitationIn = precipitation * 0.0393701;
+  const today = new Date();
+
+const formattedDate = today.toLocaleDateString("en-US", {
+  weekday: "long",
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+}).replace(" ", "");
 
   // if (loading) return <p className="text-white text-center">Loading weather...</p>;
 
@@ -109,7 +125,7 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
 
   return (
     // <div className="">
-      <div className="flex flex-col lg:flex-row gap-5 md:justify-between xl:justify-around  px-4 lg:px-30 py-6 ">
+      <div className="flex flex-col lg:flex-row gap-5 md:justify-between xl:justify-around px-4 md:px-16 lg:px-30 py-6 items-start ">
         
        <div className="w-full flex flex-col gap-5"> 
 
@@ -132,22 +148,27 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
     // Original div
     <div
       className="w-full rounded-lg bg-cover bg-center bg-no-repeat py-6 md:py-12 lg:py-16 h-full flex items-center"
-      style={{ backgroundImage: `url(${bgImage})` }}
+      style={{
+    backgroundImage: `url(${window.innerWidth < 640 ? bgImage2 : bgImage})`,
+   }}
     >
       <div className="flex flex-wrap flex-col sm:flex-row  sm:justify-between gap-4 items-center w-full px-3 sm:px-8 md:px-10">
         <div>
           <h3 className="font-bold text-2xl text-white">{weatherData.city}</h3>
-          <p className="font-normal text-lg text-white">Tuesday,Aug 5,2025</p>
+          <p className="font-normal text-lg text-white">{formattedDate}</p>
         </div>
         <div className="flex items-center justify-end gap-4">
           {/* <img src={sunny} className="w-15 md:w-25" alt="" /> */}
           <img
   src={getWeatherImage(weatherData.current_weather.weathercode)}
-  className="w-18 md:w-25"
+  className="w-18 md:w-23"
   alt="weather icon"
 />
 
-          <h3 className="font-bold text-white text-2xl md:text-4xl">{currentTemp}°</h3>
+          <h3 className="font-bold text-white text-4xl md:text-6xl ">
+            {switchImperial ? `${currentTemp2}°`: 
+          `${currentTemp.toFixed(0)}°` }
+            </h3>
         </div>
       </div>
     </div>
@@ -174,7 +195,9 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
     <>
       <div className="rounded-lg py-2 px-4 bg-[hsl(243,23%,30%)] text-white w-full ">
         <p className="py-2">Feels like</p>
-        <p className="py-2 text-xl md:text-2xl">{feelsLike}°</p>
+        <p className="py-2 text-xl md:text-2xl">
+          {switchImperial ? `${fahrenheit}°`: 
+          `${feelsLike.toFixed(0)}°` }</p>
       </div>
       <div className="rounded-lg py-2 px-4 bg-[hsl(243,23%,30%)] text-white w-full ">
         <p className="py-2">Humidity</p>
@@ -182,11 +205,13 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
       </div>
       <div className="rounded-lg py-2 px-4 bg-[hsl(243,23%,30%)] text-white w-full ">
         <p className="py-2">Wind</p>
-        <p className="py-2 text-xl md:text-2xl">{wind} km/h</p>
+        <p className="py-2 text-xl md:text-2xl">{switchImperial ? `${windMph} mph`: 
+          `${wind} km/h` }</p>
       </div>
       <div className="rounded-lg py-2 px-4 bg-[hsl(243,23%,30%)] text-white w-full ">
-        <p className="py-2">Perception</p>
-        <p className="py-2 text-xl md:text-2xl">{precipitation} mm</p>
+        <p className="py-2">Percipitation</p>
+        <p className="py-2 text-xl md:text-2xl">{switchImperial ? `${precipitationIn} in`: 
+          `${precipitation} mm` }</p>
       </div>
     </>
   )}
@@ -221,8 +246,16 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
       alt="weather icon"
     />
           <div className="flex gap-4">
-            <p className="text-white py-1">{weatherData.daily.temperature_2m_max[i]}</p>
-            <p className="text-white py-1">{weatherData.daily.temperature_2m_min[i]}</p>
+            <p className="text-white py-1 text-sm">
+              {switchImperial ? `${(((weatherData.daily.temperature_2m_max[i] * 9) / 5) + 32).toFixed(0)}°`: 
+          `${weatherData.daily.temperature_2m_max[i].toFixed(0)}°` }
+          
+             </p>
+              <p className="text-white py-1 text-sm">
+              {switchImperial ? `${(((weatherData.daily.temperature_2m_min[i] * 9) / 5) + 32).toFixed(0)}°`: 
+          `${weatherData.daily.temperature_2m_min[i].toFixed(0)}°` }
+          
+             </p>
           </div>
         </div>
       ))}
@@ -291,7 +324,9 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
                   <h3 className="font-normal text-white py-2">{formattedTime}</h3>
                 </div>
                 <h3 className="font-normal text-white py-2">
-                  {weatherData.hourly.apparent_temperature[idx]}°C
+                   {switchImperial ? `${(((weatherData.hourly.apparent_temperature[idx] * 9) / 5) + 32).toFixed(0)}°`: 
+          `${weatherData.hourly.apparent_temperature[idx].toFixed(0)}°` }
+                  
                 </h3>
               </div>
             );
@@ -304,21 +339,6 @@ const Weather: React.FC<WeatherProps> = ({ weatherData }) =>  {
 </div>
 
 
-
-      
-      // </div>
-      
-      // {/* {data && (
-      //   <>
-      //     <p><strong>Location:</strong> {data.latitude}, {data.longitude}</p>
-      //     <p><strong>Timezone:</strong> {data.timezone}</p>
-      //     <p><strong>Temperature:</strong> {data.current_weather.temperature}°C</p>
-      //     <p><strong>Wind Speed:</strong> {data.current_weather.windspeed} km/h</p>
-      //     <p><strong>Wind Direction:</strong> {data.current_weather.winddirection}°</p>
-      //     <p><strong>Time:</strong> {data.current_weather.time}</p>
-      //   </>
-      // )} */}
-    // </div>
   );
 };
 

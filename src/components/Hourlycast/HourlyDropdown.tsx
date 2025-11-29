@@ -1,5 +1,5 @@
 import { useState, type Dispatch, type SetStateAction } from "react";
-import sunny from "../../assets/images/icon-sunny.webp";
+// import sunny from "../../assets/images/icon-sunny.webp";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
 // Add props interface
@@ -35,9 +35,9 @@ const HourlyDropdown: React.FC<HourlyDropdownProps> = ({ selectedDay, setSelecte
             <div
               key={day}
               onClick={() => selectDay(day)}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-[hsl(243,23%,25%)] cursor-pointer"
+              className="flex items-center gap-2 px-3 rounded-lg py-1 m-2 hover:bg-[hsl(243,23%,25%)] cursor-pointer"
             >
-              <img src={sunny} className="w-5" alt="" />
+              {/* <img src={sunny} className="w-5" alt="" /> */}
               <span className="text-white">{day}</span>
             </div>
           ))}

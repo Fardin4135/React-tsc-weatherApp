@@ -4,24 +4,32 @@ import searchIcon from "../../assets/images/icon-search.svg";
 interface LocationResult {
   name: string;
   country: string;
-  country_code: string;
-  latitude: number;
-  longitude: number;
+  country_code?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 interface SearchBarProps {
   setWeatherData: (data: any) => void;
   setLoadingWeather: (value: boolean) => void;
+  onError: () => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ setWeatherData,setLoadingWeather}) => {
+const SearchBar: React.FC<SearchBarProps> = ({
+  setWeatherData,
+  setLoadingWeather,
+  onError,
+}) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<LocationResult[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<LocationResult | null>(null);
+  const [showEmptyPopup, setShowEmptyPopup] = useState(false);
 
-  const [selectedLocation, setSelectedLocation] =
-    useState<LocationResult | null>(null);
+  // Normalize text to remove accents/diacritics
+  const normalizeText = (text: string) =>
+    text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
   useEffect(() => {
     if (!query.trim()) {
@@ -42,7 +50,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ setWeatherData,setLoadingWeather}
         );
 
         const data = await res.json();
-        setResults(data.results || []);
+
+        const normalizedResults = (data.results || []).map((r: LocationResult) => ({
+          name: normalizeText(r.name || ""),
+          country: normalizeText(r.country || ""),
+          country_code: r.country_code || "",
+          latitude: r.latitude || 0,
+          longitude: r.longitude || 0,
+        }));
+
+        setResults(normalizedResults);
       } catch (error) {
         console.error(error);
       } finally {
@@ -62,49 +79,69 @@ const SearchBar: React.FC<SearchBarProps> = ({ setWeatherData,setLoadingWeather}
     setShowDropdown(false);
   };
 
-  
+  const handleSearch = async () => {
+    if (!query.trim()) {
+      setShowEmptyPopup(true);
+      setTimeout(() => setShowEmptyPopup(false), 3000);
+      return;
+    }
 
-  // ✅ UPDATED WEATHER API WITH EXTRA DATA
- const handleSearch = async () => {
-  if (!selectedLocation) return;
+    let location = selectedLocation;
 
-  const { latitude, longitude, name, country } = selectedLocation;
+    // If user typed full city name manually, we still use the first dropdown match
+    if (!location && query.trim()) {
+      location = results.find(
+        (res) => `${res.name}, ${res.country}`.toLowerCase() === query.toLowerCase()
+      ) || null;
+    }
 
-  try {
-    setLoadingWeather(true); // 🔵 start skeleton
+    if (!location) return;
 
-    const res = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=relative_humidity_2m,precipitation,apparent_temperature,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto
-`
-    );
+    const { latitude, longitude, name, country } = location;
 
-    const data = await res.json();
+    try {
+      setLoadingWeather(true);
 
-    // ✅ inject city name into data
-    const fullData = {
-      ...data,
-      city: `${name}, ${country}`,
-    };
+      const res = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=relative_humidity_2m,precipitation,apparent_temperature,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto`
+      );
 
-    setWeatherData(fullData);
+      if (!res.ok) {
+        onError();
+        throw new Error("API request failed");
+      }
 
-    // ✅ KEEP the city visible in input
-    setQuery(`${name}, ${country}`);
-  } catch (error) {
-    console.error("Weather API Error:", error);
-  } finally {
-    setLoadingWeather(false); // 🔵 stop skeleton
-    setResults([]);
-    setShowDropdown(false);
-  }
-};
+      const data = await res.json();
 
+      const fullData = {
+        ...data,
+        city: `${name}, ${country}`,
+      };
+
+      setWeatherData(fullData);
+      setQuery(`${name}, ${country}`);
+    } catch (err) {
+      console.error("Weather API Error:", err);
+      onError();
+    } finally {
+      setLoadingWeather(false);
+      setShowDropdown(false);
+      setResults([]);
+    }
+  };
 
   return (
-    <div className="px-4">
+    <div className="px-4 relative">
       <h1 className="text-white text-center text-4xl md:text-5xl xl:text-6xl py-5 sm:py-6 font-bricolage font-bold">
         How's the sky looking today?
       </h1>
+
+      {/* Empty input popup */}
+      {showEmptyPopup && (
+        <div className="fixed top-5 left-1/2 -translate-x-1/2 bg-red-500 text-white px-4 py-2 text-[0.5rem] sm:text-sm md:text-base rounded-md shadow-lg z-50 animate-pulse">
+          Please enter the city name.
+        </div>
+      )}
 
       <div className="flex gap-2 justify-center items-center md:py-8 flex-wrap flex-col sm:flex-row">
         <div className="relative w-full sm:w-[40vw]">
@@ -113,7 +150,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setWeatherData,setLoadingWeather}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for a place..."
-            className="w-full pl-10 pr-4 py-2 text-white rounded-md bg-[hsl(243,27%,20%)]
+            className="w-full pl-10 pr-4 py-2 md:py-3 text-white rounded-md bg-[hsl(243,27%,20%)]
             focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
@@ -126,7 +163,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setWeatherData,setLoadingWeather}
           {showDropdown && (
             <div
               className="absolute top-full left-0 mt-2 w-full max-h-72 overflow-y-auto 
-              rounded-xl bg-[#1f2937] shadow-2xl border border-white/10
+              rounded-xl bg-[hsl(243,27%,20%)] shadow-2xl border border-white/10
               transition-all duration-200 ease-out"
             >
               {loading && (
@@ -147,11 +184,16 @@ const SearchBar: React.FC<SearchBarProps> = ({ setWeatherData,setLoadingWeather}
                     key={index}
                     onClick={() => handleSelect(place)}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-white cursor-pointer
-                    hover:bg-[#374151] transition"
+                    hover:bg-[hsl(243,23%,30%)] transition"
                   >
                     <img
-                      src={`https://flagcdn.com/w40/${place.country_code.toLowerCase()}.png`}
+                      src={
+                        place.country_code
+                          ? `https://flagcdn.com/w40/${place.country_code.toLowerCase()}.png`
+                          : "https://via.placeholder.com/40x24?text=?"
+                      }
                       className="w-6 h-4 object-cover rounded-sm"
+                      alt={`${place.country} flag`}
                     />
                     <div>
                       <p className="font-medium">
@@ -166,7 +208,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setWeatherData,setLoadingWeather}
 
         <button
           onClick={handleSearch}
-          className="px-4 w-full sm:w-[100px] md:w-[120px] py-2 bg-[hsl(233,67%,56%)] hover:bg-[hsl(248,70%,36%)] rounded-md text-white cursor-pointer"
+          className="px-4 w-full sm:w-[100px] md:w-[120px] py-2 md:py-3 bg-[hsl(233,67%,56%)] hover:bg-[hsl(248,70%,36%)] rounded-md text-white cursor-pointer"
         >
           Search
         </button>

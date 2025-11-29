@@ -2,16 +2,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import logo from "../../assets/images/logo.svg";
 import units from "../../assets/images/icon-units.svg";
-import dropdown from "../../assets/images/icon-dropdown.svg";
+// import dropdown from "../../assets/images/icon-dropdown.svg";
 import tick from "../../assets/images/icon-checkmark.svg";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  switchImperial: boolean;
+  setSwitchImperial: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Header: React.FC<HeaderProps> = ({ switchImperial, setSwitchImperial }) => {
   const [isOpen, setIsOpen] = useState(false);
   // const [temperature, setTemperature] = useState<"celsius" | "fahrenheit">("celsius");
   // const [wind, setWind] = useState<"km" | "mph">("km");
   // const [precipitation, setPrecipitation] = useState<"mm" | "inches">("mm");
 
-  const [switchImperial,setSwitchImperial] = useState<boolean>(false);
+  
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -46,7 +52,7 @@ const Header: React.FC = () => {
         >
           <img src={units} className="w-[12px] sm:w-[15px] md:w-[18px]" alt="units" />
           <p className="text-white">Units</p>
-          <img src={dropdown} className="cursor-pointer w-[12px] sm:w-[15px] md:w-[18px]" alt="dropdown" />
+          <ChevronDownIcon className={`w-4 text-white h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
         </div>
       </div>
 
@@ -59,10 +65,10 @@ const Header: React.FC = () => {
       >
         {/* Switch to Imperial */}
         {!switchImperial ? 
-        <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={()=>setSwitchImperial(true)}>
+        <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={() => setSwitchImperial(prev => !prev)}>
           Switch to Imperial
         </div>
-        : <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={()=>setSwitchImperial(false)}>
+        : <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={() => setSwitchImperial(prev => !prev)}>
           Switch to Metric
         </div> }
 
