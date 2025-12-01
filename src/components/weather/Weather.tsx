@@ -11,7 +11,7 @@ import parialCloud from "../../assets/images/icon-partly-cloudy.webp"
 import rain from "../../assets/images/icon-rain.webp";
 import thunder from "../../assets/images/icon-storm.webp";
 import overcast from "../../assets/images/icon-overcast.webp";
-import "./weather.css"
+import "./Weather.css"
 
 interface WeatherProps {
   switchImperial: boolean;
