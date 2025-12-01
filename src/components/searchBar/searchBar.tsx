@@ -132,9 +132,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="px-4 relative">
-      <h1 className="text-white text-center text-4xl md:text-5xl xl:text-6xl py-5 sm:py-6 font-bricolage font-bold">
-        How's the sky looking today?
-      </h1>
+     <h1
+  className="text-white text-center text-4xl md:text-5xl xl:text-6xl py-5 sm:py-6 font-bricolage font-bold"
+  style={{ fontFamily: "Bricolage Grotesque, DM Sans, sans-serif" }}
+>
+  How's the sky looking today?
+</h1>
+
 
       {/* Empty input popup */}
       {showEmptyPopup && (
