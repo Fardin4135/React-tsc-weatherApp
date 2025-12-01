@@ -11,6 +11,7 @@ import parialCloud from "../../assets/images/icon-partly-cloudy.webp"
 import rain from "../../assets/images/icon-rain.webp";
 import thunder from "../../assets/images/icon-storm.webp";
 import overcast from "../../assets/images/icon-overcast.webp";
+import "./weather.css"
 
 interface WeatherProps {
   switchImperial: boolean;
@@ -271,7 +272,7 @@ const formattedDate = today.toLocaleDateString("en-US", {
   </div>
 
   {/* Scrollable container */}
-  <div className="flex flex-col gap-3 mt-2 max-h-[470px] overflow-y-auto">
+  <div className="custom-scrollbar flex flex-col gap-3 mt-2 max-h-[470px] overflow-y-auto pr-3">
     {loading
       ? Array.from({ length: 8 }).map((_, index) => (
           <div

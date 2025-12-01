@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import searchIcon from "../../assets/images/icon-search.svg";
-
+import "./searchBar.css";
 interface LocationResult {
   name: string;
   country: string;
@@ -168,7 +168,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             <div
               className="absolute top-full left-0 mt-2 w-full max-h-72 overflow-y-auto 
               rounded-xl bg-[hsl(243,27%,20%)] shadow-2xl border border-white/10
-              transition-all duration-200 ease-out"
+              transition-all duration-200 ease-out custom-scrollbar pr-2"
             >
               {loading && (
                 <div className="px-4 py-3 text-gray-300 text-sm animate-pulse">
