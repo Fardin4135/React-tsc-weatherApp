@@ -23,7 +23,7 @@ const HourlyDropdown: React.FC<HourlyDropdownProps> = ({ selectedDay, setSelecte
     <div className="relative inline-block">
       <button
         onClick={toggleDropdown}
-        className="flex items-center gap-2 bg-[hsl(243,23%,30%)] text-white px-3 py-1 rounded-lg"
+        className="flex items-center gap-2 bg-[hsl(243,23%,30%)] hover:bg-[hsl(243,23%,25%)] cursor-pointer text-white px-3 py-1 rounded-lg"
       >
         <span>{selectedDay}</span>
         <ChevronDownIcon className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
