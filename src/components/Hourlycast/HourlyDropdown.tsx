@@ -1,4 +1,4 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 // import sunny from "../../assets/images/icon-sunny.webp";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 
@@ -13,6 +13,23 @@ const HourlyDropdown: React.FC<HourlyDropdownProps> = ({
   setSelectedDay,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+   const dropdownRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLDivElement>(null);
+  
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node) &&
+          buttonRef.current &&
+          !buttonRef.current.contains(event.target as Node)
+        ) {
+          setIsOpen(false);
+        }
+      };
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
+    }, []);
 
   const days = [
     "Monday",
@@ -31,7 +48,7 @@ const HourlyDropdown: React.FC<HourlyDropdownProps> = ({
   };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block"  ref={buttonRef}>
       <button
         onClick={toggleDropdown}
         className="flex items-center gap-2 bg-[hsl(243,23%,30%)] hover:bg-[hsl(243,23%,30%)] cursor-pointer text-white px-4 py-2 rounded-lg"
@@ -45,7 +62,7 @@ const HourlyDropdown: React.FC<HourlyDropdownProps> = ({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-4 w-55  bg-[hsl(243,27%,20%)] rounded-lg border border-[hsl(243,23%,30%)] shadow-lg z-40 overflow-hidden">
+        <div className="absolute right-0 mt-4 w-55  bg-[hsl(243,27%,20%)] rounded-lg border border-[hsl(243,23%,30%)] shadow-lg z-40 overflow-hidden" ref={dropdownRef}>
           {days.map((day) => (
             <div
               key={day}

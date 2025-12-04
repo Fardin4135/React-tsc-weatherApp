@@ -148,7 +148,7 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
     .replace(/,/g, ", ");
 
   return (
-    <div className="flex flex-col xl:flex-row gap-6 lg:gap-8 xl:gap-10 md:justify-between xl:justify-around px-4 md:px-8 lg:px-10 xl:px-20 2xl:px-30 py-6 items-start">
+    <div className="flex flex-col xl:flex-row gap-4 lg:gap-6 xl:gap-7 md:justify-between xl:justify-around px-4 md:px-8 lg:px-10 xl:px-20 2xl:px-30 py-6 items-start">
       <div className="w-full flex flex-col gap-10 pb-5">
         {/* HEADER CARD */}
         {showSkeleton ? (
@@ -166,7 +166,7 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
           </div>
         ) : (
           <div
-            className="w-full rounded-3xl bg-cover bg-center bg-no-repeat md:py-12 lg:py-16 h-[320px] flex items-center"
+            className="w-full rounded-3xl bg-cover bg-center bg-no-repeat md:py-12 lg:py-16 h-[290px] flex items-center"
             style={{
               backgroundImage: `url(${
                 window.innerWidth < 640 ? bgImage2 : bgImage
@@ -328,7 +328,7 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
     />
   </div>
 
-  <div className="custom-scrollbar flex flex-col gap-4 mt-2 max-h-[635px] overflow-y-auto w-[calc(100%+20px)] pr-[16px] -mr-[20px]">
+  <div className="custom-scrollbar flex flex-col gap-4 mt-2 max-h-[605px] overflow-y-auto w-[calc(100%+20px)] pr-[16px] -mr-[20px]">
     {showSkeleton
       ? Array.from({ length: 8 }).map((_, index) => (
           <div
@@ -382,12 +382,12 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
                     )}
                     className="w-10"
                   />
-                  <h3 className="font-normal text-white py-2">
+                  <h3 className="font-normal text-white ">
                     {formattedTime}
                   </h3>
                 </div>
 
-                <h3 className="font-normal text-white py-2">
+                <h3 className="font-normal text-white ">
                   {switchImperial
                     ? `${(
                         (finalWeather.hourly.apparent_temperature[idx] * 9) /

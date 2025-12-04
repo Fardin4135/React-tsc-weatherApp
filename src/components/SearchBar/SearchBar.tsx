@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import searchIcon from "../../assets/images/icon-search.svg";
 import "./searchBar.css";
@@ -22,6 +22,9 @@ interface SearchBarProps {
 const normalizeText = (text: string) =>
   text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+
+
+
 const SearchBar: React.FC<SearchBarProps> = ({
   setWeatherData,
   onError,
@@ -32,6 +35,25 @@ const SearchBar: React.FC<SearchBarProps> = ({
     useState<LocationResult | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showEmptyPopup, setShowEmptyPopup] = useState(false);
+
+  
+     const dropdownRef = useRef<HTMLDivElement>(null);
+      const buttonRef = useRef<HTMLDivElement>(null);
+    
+      useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+          if (
+            dropdownRef.current &&
+            !dropdownRef.current.contains(event.target as Node) &&
+            buttonRef.current &&
+            !buttonRef.current.contains(event.target as Node)
+          ) {
+            setShowDropdown(false);
+          }
+        };
+        document.addEventListener("click", handleClickOutside);
+        return () => document.removeEventListener("click", handleClickOutside);
+      }, []);
 
   // ✅ React Query to fetch location results
   const { data: results = [], isFetching: loading } = useQuery<
@@ -110,7 +132,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <div className="px-4 relative">
       <h1
-        className="text-white text-center text-4xl md:text-5xl xl:text-6xl py-5 sm:py-6 font-bricolage font-bold"
+        className="text-white text-center text-5xl xl:text-6xl py-5 sm:py-6 font-bricolage font-bold"
         style={{ fontFamily: "Bricolage Grotesque, DM Sans, sans-serif" }}
       >
         How's the sky looking today?
@@ -122,20 +144,21 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
       )}
 
-      <div className="flex gap-2 justify-center items-center md:py-8 flex-wrap flex-col sm:flex-row">
-        <div className="relative w-full sm:w-[40vw]">
+      <div className="flex gap-4 justify-center items-center py-3 md:py-6 lg:py-8  flex-wrap flex-col sm:flex-row">
+        <div className="relative w-full sm:w-[70vw] md:w-[70vw] lg:w-[43vw]" ref={buttonRef}>
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for a place..."
-            className="w-full pl-10 pr-4 py-2 md:py-3 text-white rounded-md bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,24%)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-14 pr-4 py-3 text-white rounded-xl bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,24%)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
             onFocus={() => setShowDropdown(true)}
+            
           />
           <img
             src={searchIcon}
             alt="search"
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5"
+            className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 "
           />
 
           {showDropdown && (
@@ -143,7 +166,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
               className="absolute top-full left-0 mt-2 w-full max-h-72 overflow-y-auto 
                 rounded-xl bg-[hsl(243,27%,20%)] shadow-2xl border border-white/10
                 transition-all duration-200 ease-out custom-scrollbar pr-2"
-            >
+          ref={dropdownRef}    >
               {loading && (
                 <div className="px-4 py-3 text-gray-300 text-sm animate-pulse">
                   Loading locations...
@@ -184,7 +207,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
         <button
           onClick={handleSearch}
-          className="px-4 w-full sm:w-[100px] md:w-[120px] py-2 md:py-3 bg-[hsl(233,67%,56%)] hover:bg-[hsl(248,70%,36%)] rounded-md text-white cursor-pointer"
+          className="px-4 w-full sm:w-[100px] md:w-[140px] py-3 bg-[hsl(233,67%,56%)] hover:bg-[hsl(248,70%,36%)] rounded-xl text-white text-lg cursor-pointer"
         >
           Search
         </button>
