@@ -11,13 +11,14 @@ interface HeaderProps {
   setSwitchImperial: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Header: React.FC<HeaderProps> = ({ switchImperial, setSwitchImperial }) => {
+const Header: React.FC<HeaderProps> = ({
+  switchImperial,
+  setSwitchImperial,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   // const [temperature, setTemperature] = useState<"celsius" | "fahrenheit">("celsius");
   // const [wind, setWind] = useState<"km" | "mph">("km");
   // const [precipitation, setPrecipitation] = useState<"mm" | "inches">("mm");
-
-  
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
@@ -39,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({ switchImperial, setSwitchImperial }) =>
 
   return (
     <div className="relative">
-      <div className="flex justify-between items-center px-4 py-2 md:px-20 md:py-10">
+      <div className="flex justify-between items-center px-4 py-4 md:px-20 md:py-10">
         <div className="w-[30vw] sm:w-[40vw]">
           <img src={logo} alt="Logo" />
         </div>
@@ -48,29 +49,47 @@ const Header: React.FC<HeaderProps> = ({ switchImperial, setSwitchImperial }) =>
         <div
           ref={buttonRef}
           className="flex gap-2 sm:gap-3 rounded px-2 py-1 sm:px-4 sm:py-2 items-center bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,30%)] cursor-pointer text-sm md:text-lg"
-          onClick={() => setIsOpen(prev => !prev)}
+          onClick={() => setIsOpen((prev) => !prev)}
         >
-          <img src={units} className="w-[12px] sm:w-[15px] md:w-[18px]" alt="units" />
+          <img
+            src={units}
+            className="w-[12px] sm:w-[15px] md:w-[18px]"
+            alt="units"
+          />
           <p className="text-white">Units</p>
-          <ChevronDownIcon className={`w-4 text-white h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDownIcon
+            className={`w-4 text-white h-4 transition-transform ${
+              isOpen ? "rotate-180" : ""
+            }`}
+          />
         </div>
       </div>
 
       {/* Dropdown content */}
       <div
         ref={dropdownRef}
-        className={`overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 absolute right-4 md:right-20 md:top-24 z-50 w-[250px] bg-[hsl(243,27%,20%)] text-white p-2 rounded-lg transform transition-all duration-200 origin-top-right ${
-          isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
+        className={`overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 absolute right-4 md:right-20 md:top-24 z-30 w-[210px] bg-[hsl(243,27%,20%)] text-white p-2 rounded-xl border border-[hsl(243,23%,30%)] transform transition-all duration-200 origin-top-right ${
+          isOpen
+            ? "opacity-100 scale-100"
+            : "opacity-0 scale-95 pointer-events-none"
         }`}
       >
         {/* Switch to Imperial */}
-        {!switchImperial ? 
-        <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={() => setSwitchImperial(prev => !prev)}>
-          Switch to Imperial
-        </div>
-        : <div className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md " onClick={() => setSwitchImperial(prev => !prev)}>
-          Switch to Metric
-        </div> }
+        {!switchImperial ? (
+          <div
+            className="cursor-pointer hover:bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md "
+            onClick={() => setSwitchImperial((prev) => !prev)}
+          >
+            Switch to Imperial
+          </div>
+        ) : (
+          <div
+            className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md "
+            onClick={() => setSwitchImperial((prev) => !prev)}
+          >
+            Switch to Metric
+          </div>
+        )}
 
         {/* Temperature */}
         <p className="p-2 text-[hsl(240,6%,70%)] text-sm">Temperature</p>

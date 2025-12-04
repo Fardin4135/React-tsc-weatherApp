@@ -8,10 +8,21 @@ interface HourlyDropdownProps {
   setSelectedDay: Dispatch<SetStateAction<string>>;
 }
 
-const HourlyDropdown: React.FC<HourlyDropdownProps> = ({ selectedDay, setSelectedDay }) => {
+const HourlyDropdown: React.FC<HourlyDropdownProps> = ({
+  selectedDay,
+  setSelectedDay,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const selectDay = (day: string) => {
@@ -23,14 +34,18 @@ const HourlyDropdown: React.FC<HourlyDropdownProps> = ({ selectedDay, setSelecte
     <div className="relative inline-block">
       <button
         onClick={toggleDropdown}
-        className="flex items-center gap-2 bg-[hsl(243,23%,30%)] hover:bg-[hsl(243,23%,25%)] cursor-pointer text-white px-3 py-1 rounded-lg"
+        className="flex items-center gap-2 bg-[hsl(243,23%,30%)] hover:bg-[hsl(243,23%,30%)] cursor-pointer text-white px-4 py-2 rounded-lg"
       >
         <span>{selectedDay}</span>
-        <ChevronDownIcon className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDownIcon
+          className={`w-4 h-4 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1 w-40 bg-[hsl(243,23%,30%)] rounded-lg shadow-lg z-10 overflow-hidden">
+        <div className="absolute right-0 mt-4 w-55  bg-[hsl(243,27%,20%)] rounded-lg border border-[hsl(243,23%,30%)] shadow-lg z-40 overflow-hidden">
           {days.map((day) => (
             <div
               key={day}

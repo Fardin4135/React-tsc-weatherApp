@@ -1,5 +1,5 @@
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
+  width: 1px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -8,5 +8,5 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: hsl(243, 23%, 40%);
-  border-radius: 10px;
+  border-radius: 2px;
 }
