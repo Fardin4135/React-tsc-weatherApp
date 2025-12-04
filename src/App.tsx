@@ -3,7 +3,7 @@ import "./App.css";
 import Header from "./components/header/Header";
 import Weather from "./components/weather/Weather";
 import ApiError from "./components/ApiErrorState/ApiError";
-import SearchBar from "./components/TMPbar/SearchBar";
+import SearchBar from "./components/SearchBar/SearchBar";
 // import SearchBar from './components/searchBar/searchBar'
 
 function App() {
