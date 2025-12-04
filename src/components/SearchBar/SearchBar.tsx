@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import searchIcon from "../../assets/images/icon-search.svg";
 import "./searchBar.css";
+const BASE_URL = import.meta.env.VITE_WEATHER_API;
+
 
 interface LocationResult {
   name: string;
@@ -80,14 +82,20 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
     setLoadingWeather(true);
     fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=relative_humidity_2m,precipitation,apparent_temperature,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto`
+      `${BASE_URL}?latitude=${latitude}&longitude=${longitude}&current_weather=true&hourly=relative_humidity_2m,precipitation,apparent_temperature,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto`
     )
       .then((res) => {
         if (!res.ok) throw new Error("API request failed");
         return res.json();
       })
       .then((data) => {
-        setWeatherData({ ...data, city: `${name}, ${country}` });
+        setWeatherData({
+  ...data,
+  latitude,
+  longitude,
+  city: `${name}, ${country}`,
+});
+
       })
       .catch((err) => {
         console.error(err);

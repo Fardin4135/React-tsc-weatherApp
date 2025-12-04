@@ -11,6 +11,7 @@ import rain from "../../assets/images/icon-rain.webp";
 import thunder from "../../assets/images/icon-storm.webp";
 import overcast from "../../assets/images/icon-overcast.webp";
 import "./Weather.css";
+const BASE_URL = import.meta.env.VITE_WEATHER_API;
 
 export interface CurrentWeather {
   temperature: number;
@@ -54,18 +55,32 @@ interface WeatherProps {
   onError: () => void;
 }
 
-const fetchWeather = async (): Promise<WeatherResponse> => {
+// const fetchWeather = async (): Promise<WeatherResponse> => {
+//   const res = await fetch(
+//     "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto"
+//   );
+
+//   if (!res.ok) {
+//     throw new Error("Failed to fetch weather");
+//   }
+
+//   const data: WeatherResponse = await res.json();
+//   data.city = "Berlin, Germany";
+
+//   return data;
+// };
+const fetchWeather = async (lat: number, lon: number): Promise<WeatherResponse> => {
   const res = await fetch(
-    "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current_weather=true&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto"
+    `${BASE_URL}?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,windspeed_10m,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode&timezone=auto`
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch weather");
+    throw new Error("Failed to fetch data");
   }
+  
 
   const data: WeatherResponse = await res.json();
   data.city = "Berlin, Germany";
-
   return data;
 };
 
@@ -76,11 +91,20 @@ const Weather: React.FC<WeatherProps> = ({
 }) => {
   const [selectedDay, setSelectedDay] = useState("Today");
 
-  const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
-    queryKey: ["berlinWeather"],
-    queryFn: fetchWeather,
-    staleTime: 1000 * 60 * 5,
-  });
+const defaultLat = 52.52;
+const defaultLon = 13.41;
+
+// if searched --> use that
+const lat = weatherData?.latitude ?? defaultLat;
+const lon = weatherData?.longitude ?? defaultLon;
+
+const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
+  queryKey: ["weather", lat, lon],
+  queryFn: () => fetchWeather(lat, lon),
+  enabled: !!lat && !!lon,
+  staleTime: 1000 * 60 * 5,
+});
+
 
   const finalWeather: WeatherResponse | undefined =
     weatherData ?? berlinWeather;
@@ -100,7 +124,7 @@ const Weather: React.FC<WeatherProps> = ({
   const fahrenheit = ((feelsLike * 9) / 5 + 32).toFixed(0);
   const currentTemp2 = ((currentTemp * 9) / 5 + 32).toFixed(0);
   const windMph = (wind * 0.621371).toFixed(0);
-  const precipitationIn = (precipitation * 0.0393701).toFixed(2);
+  const precipitationIn = (precipitation * 0.0393701).toFixed(0);
 
   const getWeatherImage = (code: number) => {
     if (code === 0) return sunny;
@@ -166,7 +190,8 @@ const Weather: React.FC<WeatherProps> = ({
                   )}
                   className="w-24"
                 />
-                <h3 className="font-bold text-white text-8xl">
+                <h3 className="font-bold text-white text-8xl"
+                 >
                   {switchImperial
                     ? `${currentTemp2}°`
                     : `${currentTemp.toFixed(0)}°`}
