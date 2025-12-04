@@ -129,7 +129,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for a place..."
-            className="w-full pl-10 pr-4 py-2 md:py-3 text-white rounded-md bg-[hsl(243,27%,20%)] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-10 pr-4 py-2 md:py-3 text-white rounded-md bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,24%)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
             onFocus={() => setShowDropdown(true)}
           />
           <img

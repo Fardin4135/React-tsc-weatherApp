@@ -215,7 +215,7 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
             ))
           ) : (
             <>
-              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,23%,24%)] text-white w-full border-2 border-[hsl(243,23%,30%)]">
+              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,27%,20%)] text-white w-full border-2 border-[hsl(243,23%,24%)]">
                 <p className="text-[hsl(250,6%,84%)] text-lg 2xl:text-xl">
                   Feels like
                 </p>
@@ -226,14 +226,14 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
                 </p>
               </div>
 
-              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,23%,24%)] text-white w-full border-2 border-[hsl(243,23%,30%)]">
+              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,27%,20%)] text-white w-full border-2 border-[hsl(243,23%,24%)]">
                 <p className="text-[hsl(250,6%,84%)] text-lg 2xl:text-xl">
                   Humidity
                 </p>
                 <p className="text-2xl">{humidity}%</p>
               </div>
 
-              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,23%,24%)] text-white w-full border-2 border-[hsl(243,23%,30%)]">
+              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,27%,20%)] text-white w-full border-2 border-[hsl(243,23%,24%)]">
                 <p className="text-[hsl(250,6%,84%)] text-lg 2xl:text-xl">
                   Wind
                 </p>
@@ -242,7 +242,7 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
                 </p>
               </div>
 
-              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,23%,24%)] text-white w-full border-2 border-[hsl(243,23%,30%)]">
+              <div className="py-3 py-4 md:py-6 rounded-xl flex flex-col items-start gap-2 px-2 ps-4 md:ps-6 lg:ps-3 2xl:ps-5 bg-[hsl(243,27%,20%)] text-white w-full border-2 border-[hsl(243,23%,24%)]">
                 <p className="text-[hsl(250,6%,84%)] text-lg 2xl:text-xl">
                   Percipitation
                 </p>
@@ -277,7 +277,7 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
               : finalWeather.daily.time.map((day, i) => (
                   <div
                     key={i}
-                    className="rounded-xl py-3 w-full flex flex-col items-center px-2 bg-[hsl(243,23%,24%)] border-2 border-[hsl(243,23%,30%)] text-white"
+                    className="rounded-xl py-3 w-full flex flex-col items-center px-2 bg-[hsl(243,27%,20%)] border-2 border-[hsl(243,23%,24%)] text-white"
                   >
                     <h5>
                       {new Date(day).toLocaleDateString("en-US", {

@@ -48,12 +48,12 @@ const Header: React.FC<HeaderProps> = ({
         {/* Dropdown button */}
         <div
           ref={buttonRef}
-          className="flex gap-2 sm:gap-3 rounded px-2 py-1 sm:px-4 sm:py-2 items-center bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,30%)] cursor-pointer text-sm md:text-lg"
+          className="flex gap-2 sm:gap-3 rounded-lg px-2 py-1 sm:px-4 sm:py-2 items-center bg-[hsl(243,27%,20%)] hover:bg-[hsl(243,23%,30%)] cursor-pointer text-sm md:text-lg"
           onClick={() => setIsOpen((prev) => !prev)}
         >
           <img
             src={units}
-            className="w-[12px] sm:w-[15px] md:w-[18px]"
+            className="w-[12px] sm:w-[14px] md:w-[16px]"
             alt="units"
           />
           <p className="text-white">Units</p>
