@@ -6,7 +6,7 @@ interface ApiErrorProps {
 
 const ApiError: React.FC<ApiErrorProps> = ({ onRetry }) => {
   return (
-    <div className="flex flex-col items-center justify-center text-center h-[calc(100vh-80px)] ">
+    <div className="flex flex-col items-center justify-center text-center my-12 md:my-14 lg:my-16">
       
       {/* Icon */}
       <div className="mb-4 text-gray-300 text-4xl">
@@ -26,7 +26,7 @@ const ApiError: React.FC<ApiErrorProps> = ({ onRetry }) => {
       {/* Retry Button */}
       <button
         onClick={onRetry}
-        className="flex items-center gap-2 bg-[hsl(243,23%,30%)] hover:bg-[hsl(243,23%,35%)] text-white px-5 py-2 rounded-md transition"
+        className="flex items-center gap-2 bg-[hsl(243,23%,30%)] hover:bg-[hsl(243,23%,35%)] text-white px-5 py-2 rounded-md transition cursor-pointer"
       >
         <RefreshCw size={16} />
         Retry
