@@ -319,91 +319,91 @@ const { data: berlinWeather, isLoading } = useQuery<WeatherResponse>({
       </div>
 
       {/* HOURLY */}
-      <div className="bg-[hsl(243,27%,20%)] w-full xl:w-[540px] rounded-3xl p-5">
-        <div className="flex justify-between items-center pb-3">
-          <h3 className="text-white font-bold text-xl">Hourly forecast</h3>
-          <HourlyDropdown
-            selectedDay={selectedDay}
-            setSelectedDay={setSelectedDay}
-          />
-        </div>
+     <div className="bg-[hsl(243,27%,20%)] w-full xl:w-[540px] rounded-3xl p-5">
+  <div className="flex justify-between items-center pb-3">
+    <h3 className="text-white font-bold text-xl">Hourly forecast</h3>
+    <HourlyDropdown
+      selectedDay={selectedDay}
+      setSelectedDay={setSelectedDay}
+    />
+  </div>
 
-        <div className="custom-scrollbar flex flex-col gap-4 mt-2 max-h-[635px] overflow-y-auto pr-3">
-          {showSkeleton
-            ? Array.from({ length: 8 }).map((_, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between items-center bg-[hsl(243,23%,30%)] rounded-lg px-2 animate-pulse"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 bg-[hsl(243,23%,40%)] rounded-full" />
-                    <div className="h-6 w-16 bg-[hsl(243,23%,40%)] rounded" />
-                  </div>
-                  <div className="h-6 w-12 bg-[hsl(243,23%,40%)] rounded" />
+  <div className="custom-scrollbar flex flex-col gap-4 mt-2 max-h-[635px] overflow-y-auto w-[calc(100%+20px)] pr-[16px] -mr-[20px]">
+    {showSkeleton
+      ? Array.from({ length: 8 }).map((_, index) => (
+          <div
+            key={index}
+            className="flex justify-between items-center bg-[hsl(243,23%,30%)] rounded-lg px-2 animate-pulse"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-10 h-10 bg-[hsl(243,23%,40%)] rounded-full" />
+              <div className="h-6 w-16 bg-[hsl(243,23%,40%)] rounded" />
+            </div>
+            <div className="h-6 w-12 bg-[hsl(243,23%,40%)] rounded" />
+          </div>
+        ))
+      : finalWeather.hourly.time
+          .map((timeStr, idx) => ({ timeStr, idx }))
+          .filter(({ timeStr }) => {
+            const date = new Date(timeStr);
+            const dayName = date.toLocaleDateString("en-US", {
+              weekday: "long",
+            });
+            const todayName = new Date().toLocaleDateString("en-US", {
+              weekday: "long",
+            });
+
+            return selectedDay === "Today"
+              ? dayName === todayName
+              : dayName === selectedDay;
+          })
+          .map(({ timeStr, idx }) => {
+            const date = new Date(timeStr);
+
+            let hours = date.getHours();
+            const formattedTime =
+              hours === 0
+                ? "12 AM"
+                : hours < 12
+                ? `${hours} AM`
+                : hours === 12
+                ? "12 PM"
+                : `${hours - 12} PM`;
+
+            return (
+              <div
+                key={idx}
+                className="flex justify-between items-center border-2 border-[hsl(243,23%,30%)] bg-[hsl(243,23%,24%)] py-2 rounded-lg px-3 text-lg md:text-xl"
+              >
+                <div className="flex items-center gap-2">
+                  <img
+                    src={getWeatherImage(
+                      finalWeather.hourly.weathercode[idx]
+                    )}
+                    className="w-10"
+                  />
+                  <h3 className="font-normal text-white py-2">
+                    {formattedTime}
+                  </h3>
                 </div>
-              ))
-            : finalWeather.hourly.time
-                .map((timeStr, idx) => ({ timeStr, idx }))
-                .filter(({ timeStr }) => {
-                  const date = new Date(timeStr);
-                  const dayName = date.toLocaleDateString("en-US", {
-                    weekday: "long",
-                  });
-                  const todayName = new Date().toLocaleDateString("en-US", {
-                    weekday: "long",
-                  });
 
-                  return selectedDay === "Today"
-                    ? dayName === todayName
-                    : dayName === selectedDay;
-                })
-                .map(({ timeStr, idx }) => {
-                  const date = new Date(timeStr);
+                <h3 className="font-normal text-white py-2">
+                  {switchImperial
+                    ? `${(
+                        (finalWeather.hourly.apparent_temperature[idx] * 9) /
+                          5 +
+                        32
+                      ).toFixed(0)}°`
+                    : `${finalWeather.hourly.apparent_temperature[
+                        idx
+                      ].toFixed(0)}°`}
+                </h3>
+              </div>
+            );
+          })}
+  </div>
+</div>
 
-                  let hours = date.getHours();
-                  const formattedTime =
-                    hours === 0
-                      ? "12 AM"
-                      : hours < 12
-                      ? `${hours} AM`
-                      : hours === 12
-                      ? "12 PM"
-                      : `${hours - 12} PM`;
-
-                  return (
-                    <div
-                      key={idx}
-                      className="flex justify-between items-center border-2 border-[hsl(243,23%,30%)] bg-[hsl(243,23%,24%)] py-2 rounded-lg px-3 text-lg md:text-xl"
-                    >
-                      <div className="flex items-center gap-2">
-                        <img
-                          src={getWeatherImage(
-                            finalWeather.hourly.weathercode[idx]
-                          )}
-                          className="w-10"
-                        />
-                        <h3 className="font-normal text-white py-2">
-                          {formattedTime}
-                        </h3>
-                      </div>
-
-                      <h3 className="font-normal text-white py-2">
-                        {switchImperial
-                          ? `${(
-                              (finalWeather.hourly.apparent_temperature[idx] *
-                                9) /
-                                5 +
-                              32
-                            ).toFixed(0)}°`
-                          : `${finalWeather.hourly.apparent_temperature[
-                              idx
-                            ].toFixed(0)}°`}
-                      </h3>
-                    </div>
-                  );
-                })}
-        </div>
-      </div>
     </div>
   );
 };
