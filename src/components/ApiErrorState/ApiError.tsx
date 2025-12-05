@@ -6,7 +6,7 @@ interface ApiErrorProps {
 
 const ApiError: React.FC<ApiErrorProps> = ({ onRetry }) => {
   return (
-    <div className="flex flex-col items-center justify-center text-center my-12 md:my-14 lg:my-16">
+    <div className="flex flex-col items-center justify-center text-center my-6 md:my-10 lg:my-12">
       
       {/* Icon */}
       <div className="mb-4 text-gray-300 text-4xl">

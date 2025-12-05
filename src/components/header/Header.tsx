@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({
         {/* Switch to Imperial */}
         {!switchImperial ? (
           <div
-            className="cursor-pointer hover:bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md "
+            className="cursor-pointer bg-[hsl(243,23%,30%)] text-[hsl(240,6%,70%)] hover:text-white px-2 py-1 rounded-md "
             onClick={() => 
               {setSwitchImperial((prev) => !prev)
                   setIsOpen(false)}
@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({
           </div>
         ) : (
           <div
-            className="cursor-pointer bg-[hsl(243,23%,30%)] px-2 py-1 rounded-md "
+            className="cursor-pointer bg-[hsl(243,23%,30%)] text-[hsl(240,6%,70%)] hover:text-white px-2 py-1 rounded-md "
             onClick={() => {setSwitchImperial((prev) => !prev)
                   setIsOpen(false)}
             }
